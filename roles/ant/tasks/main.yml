@@ -9,14 +9,15 @@
   when: ant_download|changed
 
 - name: get ant-version
-  command: tar jtvf /tmp/ant.tar.bz2 | head -1
+  shell: tar jtf /tmp/ant.tar.bz2 | head -1 | awk -F"/" '{print $1}'
   register: ant_version
   when: ant_download|changed
 
 - name: Create symlink
   file: src=/usr/{{ ant_version }} dest=/usr/ant  state=link
-  when: ant_installed|changed
+  when: ant_version|changed
+  with_items: ant_version.stdout_lines
+
 
 - name: Update profile Ant
   copy: src=ant.sh dest=/etc/profile.d/ant.sh
-  when: ant_installed|changed

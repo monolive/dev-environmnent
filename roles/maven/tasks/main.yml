@@ -9,14 +9,15 @@
   when: maven_download|changed
 
 - name: get maven-version
-  command: tar ztvf /tmp/maven.tar.gz | head -1
-  register: maven_version
+  shell: tar ztvf /tmp/maven.tar.gz | head -1 | awk -F"/" '{print $1}'
+  register: maven_installed
   when: maven_download|changed
 
+
 - name: Create symlink
-  file: src=/usr/{{ maven_version }} dest=/usr/maven  state=link
-  when: maven_installed|changed
+  file: src=/usr/{{ item }} dest=/usr/maven  state=link
+  when: maven_version|changed
+  with_items: maven_version.stdout_lines
 
 - name: Update profile Ant
   copy: src=maven.sh dest=/etc/profile.d/maven.sh
-  when: maven_installed|changed
