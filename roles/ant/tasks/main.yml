@@ -14,7 +14,7 @@
   when: ant_download|changed
 
 - name: Create symlink
-  file: src=/usr/{{ ant_version }} dest=/usr/ant  state=link
+  file: src=/usr/{{ item }} dest=/usr/ant  state=link
   when: ant_version|changed
   with_items: ant_version.stdout_lines
 

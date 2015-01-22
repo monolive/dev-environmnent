@@ -9,8 +9,8 @@
   when: maven_download|changed
 
 - name: get maven-version
-  shell: tar ztvf /tmp/maven.tar.gz | head -1 | awk -F"/" '{print $1}'
-  register: maven_installed
+  shell: tar ztf /tmp/maven.tar.gz | head -1 | awk -F"/" '{print $1}'
+  register: maven_version
   when: maven_download|changed
 
 
