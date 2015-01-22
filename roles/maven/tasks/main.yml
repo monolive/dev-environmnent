@@ -1,0 +1,22 @@
+---
+- name : get maven
+  command : 'wget -O /tmp/maven.tar.gz {{ maven_url }}'
+  register: maven_download
+
+- name: Install maven
+  unarchive: src=/tmp/maven.tar.gz dest=/usr copy=no
+  register: maven_installed
+  when: maven_download|changed
+
+- name: get maven-version
+  command: tar ztvf /tmp/maven.tar.gz | head -1
+  register: maven_version
+  when: maven_download|changed
+
+- name: Create symlink
+  file: src=/usr/{{ maven_version }} dest=/usr/maven  state=link
+  when: maven_installed|changed
+
+- name: Update profile Ant
+  copy: src=maven.sh dest=/etc/profile.d/maven.sh
+  when: maven_installed|changed

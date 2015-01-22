@@ -1,0 +1,4 @@
+---
+  jdk_url: http://download.oracle.com/otn-pub/java/jdk/7u75-b13/jdk-7u75-linux-x64.rpm
+  ant_url: http://mirror.gopotato.co.uk/apache//ant/binaries/apache-ant-1.9.4-bin.tar.bz2
+  maven_url: http://mirror.gopotato.co.uk/apache/maven/maven-3/3.2.5/binaries/apache-maven-3.2.5-bin.tar.gz

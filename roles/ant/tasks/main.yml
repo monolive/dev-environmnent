@@ -1,0 +1,22 @@
+---
+- name : get ant
+  command : 'wget -O /tmp/ant.tar.bz2 {{ ant_url }}'
+  register: ant_download
+
+- name: Install Ant
+  unarchive: src=/tmp/ant.tar.bz2 dest=/usr copy=no
+  register: ant_installed
+  when: ant_download|changed
+
+- name: get ant-version
+  command: tar jtvf /tmp/ant.tar.bz2 | head -1
+  register: ant_version
+  when: ant_download|changed
+
+- name: Create symlink
+  file: src=/usr/{{ ant_version }} dest=/usr/ant  state=link
+  when: ant_installed|changed
+
+- name: Update profile Ant
+  copy: src=ant.sh dest=/etc/profile.d/ant.sh
+  when: ant_installed|changed

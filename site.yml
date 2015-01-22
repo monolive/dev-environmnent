@@ -1,0 +1,10 @@
+---
+- hosts: all
+  user: azureuser
+  sudo: yes
+  vars_files:
+    - vars/users
+    - vars/hdp_info
+  roles:
+    - jdk
+    - 

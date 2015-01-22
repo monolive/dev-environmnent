@@ -1,0 +1,21 @@
+---
+- name : get jdk
+  command : 'wget -O /tmp/jdk-x64.rpm --no-check-certificate --no-cookies --header "Cookie: oraclelicense=accept-securebackup-cookie" {{ jdk_url }}'
+  register: jdk_download
+
+- name: Install JDK RPM package
+  yum: name=/tmp/jdk-x64.rpm state=present
+  register: jdk_installed
+  when: jdk_download|changed
+
+- name: Set java link by latest
+  command: alternatives --install /usr/bin/java java /usr/java/latest/bin/java 200000
+  when: jdk_installed|changed
+
+- name: Set jar link by latest
+  command: alternatives --install /usr/bin/javaws javaws /usr/java/latest/bin/javaws 200000
+  when: jdk_installed|changed
+
+- name: Update profile JDK / JRE
+  copy: src=java.sh dest=/etc/profile.d/java.sh
+  when: jdk_installed|changed
